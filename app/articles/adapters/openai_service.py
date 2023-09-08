@@ -29,10 +29,15 @@ class LangChain:
         )
 
     def generate_article(self, topics: list) -> str:
+        escaped_template = article_generator_template.replace("\n", "\\n").replace(
+            '"', '\\"'
+        )
+
         messages = [
-            SystemMessage(content=article_generator_template),
-            HumanMessage(content=", ".join(topics)),
+            SystemMessage(content=escaped_template),
+            HumanMessage(content=topics),
         ]
+
         article = json.loads(self.llm(messages=messages).content)
 
         return article

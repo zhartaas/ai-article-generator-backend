@@ -15,4 +15,7 @@ class TopicsRepository:
 
     def get_topics(self, user_id):
         topics = self.database["topics"].find_one({"user_id": ObjectId(user_id)})
+        print("#" * 30)
+        print(user_id)
+        print(topics)
         return topics["topics"]

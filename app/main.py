@@ -13,13 +13,15 @@ app = FastAPI(**fastapi_config)
 def shutdown_db_client():
     client.close()
 
+                        
+origins = ["*"]  # Allow requests from any origin
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=env.CORS_ORIGINS,
-    allow_methods=env.CORS_METHODS,
-    allow_headers=env.CORS_HEADERS,
+    allow_origins=origins,
     allow_credentials=True,
+    allow_methods=["*"],  # Allow all HTTP methods (GET, POST, PUT, DELETE, etc.)
+    allow_headers=["*"],  # Allow all HTTP headers
 )
 
 app.include_router(auth_router, prefix="/auth", tags=["Auth"])

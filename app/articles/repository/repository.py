@@ -19,5 +19,5 @@ class ArticleRepository:
             {"_id": ObjectId(user_id)}
         )
         articles = articles_collection["articles"]
-        print(type(articles))
+        # print(type(articles))
         return articles

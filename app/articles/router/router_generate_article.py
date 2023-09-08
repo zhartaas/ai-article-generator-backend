@@ -12,13 +12,25 @@ class GenerateArticleResponse(AppModel):
     article: dict
 
 
+class GenerateArticleRequest(AppModel):
+    topics: str
+
+
 @router.post("/generate_article", response_model=GenerateArticleResponse)
 def generate_article(
+    input: GenerateArticleRequest,
     jwt_data: JWTData = Depends(parse_jwt_user_data),
     svc: Service = Depends(get_service),
     svc_topics: TopicsService = Depends(topics_get_service),
 ) -> dict:
-    topics = svc_topics.repository.get_topics(jwt_data.user_id)
+    if input.topics:
+        topics = input.topics
+    else:
+        topics_list = svc_topics.repository.get_topics(jwt_data.user_id)
+        topics = ", ".join(topics_list)
     article = svc.llm.generate_article(topics)
     svc.repository.insert_article(jwt_data.user_id, article)
     return GenerateArticleResponse(article=article)
+
+
+3
